@@ -12,11 +12,9 @@ export class TodosAccess {
         docClient = new XAWS.DynamoDB.DocumentClient(),
         todosTable = process.env.TODOS_TABLE,
         todosIndex = process.env.TODOS_CREATED_AT_INDEX,
-        // S3 = new XAWS.S3({ signatureVersion: 'v4' }),
         bucket_name = s3_bucket_name
     ) {
         this.docClient = docClient;
-        // this.S3 = S3;
         this.todosTable = todosTable;
         this.todosIndex = todosIndex;
         this.bucket_name = bucket_name;
@@ -41,7 +39,7 @@ export class TodosAccess {
             throw Error(error);
         }
     }
-  
+
     async createTodoItem(item) {
         logger.info("Creating a new todo");
         try {
@@ -78,7 +76,7 @@ export class TodosAccess {
                     ":dueDate": updateToDo.dueDate,
                     ":done": updateToDo.done,
                 },
-                ReturnValues: "ALL_NEW",
+                ReturnValues: "UPDATED_NEW",
             })
             .promise();
             return updateToDo;
@@ -119,7 +117,6 @@ export class TodosAccess {
                 ExpressionAttributeValues: {
                     ":attachmentUrl": attachmentUrl,
                 },
-                ReturnValues: "ALL_NEW",
             })
             .promise();
             logger.info(`Updating image url: ${ attachmentUrl }`);

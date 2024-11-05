@@ -22,7 +22,6 @@ export async function createTodo(userId, createTodo) {
     logger.info("Creating a new todo for user:", { userId });
     const todoId = uuid.v4();
     const createdAt = new Date().toISOString();
-    // const s3AttachmentUrl = attachmentUtils.getAttachmentUrl(todoId);
     const todo = {
       todoId: todoId,
       userId: userId,
@@ -59,10 +58,9 @@ export async function deleteTodo(userId, todoId) {
   }
 }
 
-export async function updateAttachmentPresignedUrl(todoId, userId) {
+export async function updateAttachmentPresignedUrl(todoId, userId, attachmentUrl) {
   try {
     logger.info("Updating attachment presigned URL:", { userId, todoId });
-    const attachmentUrl = attachmentUtils.generateUploadUrl(todoId)
     return await todosAccess.updateUrl(todoId, userId, attachmentUrl);
   } catch (error) {
     logger.error("Updating attachment presigned URL error :", { userId, todoId, error });
